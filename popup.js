@@ -35,10 +35,11 @@ class ChatAssistant {
       this.suggestedReply = document.getElementById('suggested-reply');
       this.copyBtn = document.getElementById('copy-btn');
       this.regenerateBtn = document.getElementById('regenerate-btn');
+      this.contextInput    = document.getElementById('context-input');
       this.errorSection = document.getElementById('error-section');
       this.errorMessage = document.getElementById('error-message');
       this.retryBtn = document.getElementById('retry-btn');
-      
+    //   this.contextInput = doclument.getElementById('context-input');
       // Text meaning tab elements
       this.meaningInput = document.getElementById('meaning-input');
       this.analyzeMeaningBtn = document.getElementById('analyze-meaning-btn');
@@ -97,7 +98,14 @@ class ChatAssistant {
       document.addEventListener('paste', (e) => this.handlePaste(e));
       this.analyzeBtn.addEventListener('click', () => this.analyzeImage());
       this.copyBtn.addEventListener('click', () => this.copyToClipboard(this.suggestedReply.value));
-      this.regenerateBtn.addEventListener('click', () => this.regenerateReply());
+
+      this.regenerateBtn.addEventListener('click', () => {
+        const contextInput = this.contextInput.value.trim();
+        console.log('contextInput:', contextInput);
+        this.regenerateReply(contextInput);
+      });
+      
+      
       this.retryBtn.addEventListener('click', () => this.hideError());
       
       // Text meaning tab events
@@ -247,14 +255,15 @@ class ChatAssistant {
       }
     }
   
-    async regenerateReply() {
+    async regenerateReply(text) {
+        // console.log(text);
       if (!this.extractedText) return;
       
       this.showLoading();
       this.hideError();
       
       try {
-        const suggestion = await this.generateReplySuggestion(this.extractedText);
+        const suggestion = await this.regenerateReplySuggestion(this.extractedText,text);
         this.showResults(suggestion);
       } catch (error) {
         console.error('Regeneration error:', error);
@@ -523,6 +532,73 @@ class ChatAssistant {
       });
     }
   
+
+
+    async regenerateReplySuggestion(conversationText,suggestion) {
+        const maxLength = 3000;
+        const truncatedText = conversationText.length > maxLength 
+          ? '...' + conversationText.slice(-maxLength)
+          : conversationText;
+
+        const trunSugg=suggestion.length > maxLength 
+        ? '...' + suggestion.slice(-maxLength)
+        : suggestion;
+    
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.geminiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `You are an AI assistant whose job is to generate a human,
+                 context-aware reply that the "sender" should send in an ongoing conversation.
+                  The input you receive will clearly label each message as either "sender:" or "receiver:".
+                   First, you should analyze the conversation's tone, relationship, and style based on those sender/receiver labels.
+                   Then, craft a single, medium-length, natural-sounding response that the sender could send next. Your reply should feel warm and genuine,
+                    match the conversation's existing mood and topic, and use a touch of wit if appropriate.
+                     Do not add any extra explanations—only output the suggested reply text.
+    
+    Here's a conversation transcript:
+    
+    ${truncatedText}
+    
+    important point to note while answering: ${trunSugg}
+    What should be the next reply?`
+              }]
+            }],
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 150,
+              topP: 0.8,
+              topK: 10
+            }
+          })
+        });
+    
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error?.message || `Gemini API error: ${response.status}`);
+        }
+    
+        const data = await response.json();
+        
+        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+          throw new Error('No reply suggestion generated');
+        }
+        
+        return data.candidates[0].content.parts[0].text.trim();
+      }
+    
+      async fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
     // Utility methods
     async copyToClipboard(text) {
       try {
