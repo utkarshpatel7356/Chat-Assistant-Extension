@@ -1,0 +1,195 @@
+body {
+    width: 420px;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f5f5;
+  }
+  
+  .container {
+    padding: 16px;
+  }
+  
+  h2 {
+    margin: 0 0 16px 0;
+    color: #333;
+    font-size: 18px;
+  }
+  
+  h3 {
+    margin: 12px 0 8px 0;
+    color: #555;
+    font-size: 14px;
+  }
+  
+  .section {
+    background: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .input-group {
+    margin-bottom: 12px;
+  }
+  
+  .input-group label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    color: #666;
+  }
+  
+  input[type="password"], input[type="text"], textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  button {
+    background: #4285f4;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+  }
+  
+  button:hover {
+    background: #3367d6;
+  }
+  
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .upload-area {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  
+  .upload-area:hover {
+    border-color: #4285f4;
+  }
+  
+  .upload-area.dragover {
+    border-color: #4285f4;
+    background: #f0f4ff;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  
+  .button-group button {
+    flex: 1;
+  }
+  
+  .error {
+    color: #d93025;
+    font-size: 14px;
+  }
+  
+  #loading, #meaning-loading, #grammar-loading {
+    text-align: center;
+    color: #666;
+    padding: 16px 0;
+  }
+  
+  .hidden {
+    display: none !important;
+  }
+  
+  /* Tab Styles */
+  .tab-nav {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 16px;
+  }
+  
+  .tab-btn {
+    flex: 1;
+    background: transparent;
+    color: #666;
+    border: none;
+    padding: 12px 8px;
+    cursor: pointer;
+    font-size: 13px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  
+  .tab-btn:hover {
+    background: #f8f9fa;
+    color: #333;
+  }
+  
+  .tab-btn.active {
+    color: #4285f4;
+    border-bottom-color: #4285f4;
+    background: transparent;
+  }
+  
+  .tab-content {
+    display: none;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 400px) {
+    body {
+      width: 100%;
+    }
+    
+    .tab-btn {
+      font-size: 12px;
+      padding: 10px 6px;
+    }
+  }
+
+
+/* Active/click feedback (brief shrink) */
+.copy-meaning-btn:active {
+    transform: scale(0.98);
+}
+
+/* When button is in “copied” state */
+.copy-meaning-btn.copied {
+background-color: #28a745;
+}
+
+.copy-grammar-btn:active {
+    transform: scale(0.98);
+}
+.copy-grammar-btn.copied {
+    background-color: #28a745;
+}
+
+.copy-btn:active {
+    transform: scale(0.98);
+}
+.copy-btn.copied {
+    background-color: #28a745;
+}

@@ -1,0 +1,26 @@
+{
+    "manifest_version": 3,
+    "name": "Chat Assistant",
+    "version": "1.0",
+    "description": "Analyze chat screenshots and get AI-powered reply suggestions",
+    "permissions": [
+      "storage",
+      "activeTab"
+    ],
+    "host_permissions": [
+      "https://generativelanguage.googleapis.com/*",
+      "https://api.openai.com/*"
+    ],
+    "action": {
+      "default_popup": "popup.html",
+      "default_title": "Chat Assistant"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "icons": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
