@@ -113,4 +113,4 @@ This project is open source. Please refer to the license file for usage terms.
 
 ---
 
-**Made with ❤️ for enhanced browsing productivity**
+**Made with ❤️ for enhanced texting productivity**
